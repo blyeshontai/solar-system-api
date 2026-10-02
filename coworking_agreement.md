@@ -4,22 +4,27 @@ Talk through each section with your partner. Add notes on what you discussed and
 
 ## Accessibility Needs
 *What does each team member need access to in order to succeed and show up the best they can?*
+We need to feel comfortable to ask questions when something is difficucl or confusing.
 
 ## Collaboration vs. Individual Work Expectations
 *Clarify your collaboration expectations - does your group want to write code together all of the time? Or divide work to do independently, then come together to share accomplishments? What tools and technologies can help your collaboration?*
+We can divide some work independently and come together for discussions and to understand what step to do next. 
 
 ## Learning Style
 *How does each team member learn best in project settings?*
+We learn by practicing and taking our time understanding the material. 
 
 ## Preferred Feedback Style
 *How does each team member best receive feedback?*
+Simple and direct feedback, but in a kind way. 
 
 ## One Team Communication Skill to Improve
 *What is a teamwork-related skill you want to work on?*
-
+We want to get better at speaking using our technical word.
+We want to get better at collaborating using github. 
 ## Optional: Other agreements
 *Other co-working agreements that were not captured in the above sections.*
 
 ## Signatures
-______________ _______________
-Date: _________
+Shontai Blye, Oksana Bohuslavska, Nicole Pastor
+Date: Oct 2nd, 2026
