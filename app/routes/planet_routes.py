@@ -5,7 +5,7 @@ from ..db import db
 
 planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
 
-#Wave 1: Get all planets
+#GET PLANET
 @planets_bp.get("")
 def get_all_planets():
     planets = db.session.scalars(db.select(Planet).order_by(Planet.id))
@@ -19,57 +19,42 @@ def get_all_planets():
         for planet in planets
     ]
 
-'''
-def get_all_planets():
-    planets_response = []
-
-    for planet in planets:
-        planets_response.append(
-            {
-                "id": planet.id,
-                "name": planet.name,
-                "description": planet.description,
-                "color": planet.color,
-            }
-        )
-    return planets_response
-'''
-
-#Wave 2: Validate one planet
-def validate_planet(planet_id):
-    try:
-        planet_id = int(planet_id)
-
-    except ValueError:
-        response = {"message": f"planet {planet_id} invalid"}
-        abort(make_response(response,400))
-
-    for planet in planets:
-        if planet.id == planet_id:
-            return planet
-
-    response = {"message": f"planet{planet_id} not found"}
-    abort(make_response(response, 404))
-
-# Will rewrite these to query the database in the next wave
-'''
-#Wave 2: Get one planet
-
+#GET ONE PLANET
 @planets_bp.get("/<planet_id>")
 def get_one_planet(planet_id):
     planet = validate_planet(planet_id)
 
     return {
-        "id": planet_id,
+        "id": planet.id,
         "name": planet.name,
         "description": planet.description,
         "color": planet.color,
-
-
-
     }
-'''
-#Wave 3
+
+#UPDATE ONE PLANET
+@planets_bp.put("/<planet_id>")
+def update_planet(planet_id):
+    planet = validate_planet(planet_id)
+    request_body = request.get_json()
+
+    planet.name = request_body["name"]
+    planet.description = request_body["description"]
+    planet.color = request_body["color"]
+    db.session.commit()
+
+    return Response(status=204, mimetype="application/json")
+
+#DELETE ONE PLANET
+@planets_bp.delete("/<planet_id>")
+def delete_planet(planet_id):
+    planet = validate_planet(planet_id)
+
+    db.session.delete(planet)
+    db.session.commit()
+
+    return Response(status=204, mimetype="application/json")
+
+#POST A PLANET
 @planets_bp.post("")
 def create_planet():
     request_body = request.get_json()
@@ -88,3 +73,20 @@ def create_planet():
         "description": new_planet.description,
         "color": new_planet.color,
     }, 201
+
+#VALIDATE PLANET
+def validate_planet(planet_id):
+    try:
+        planet_id = int(planet_id)
+    except ValueError:
+        response = {"message": f"planet {planet_id} invalid"}
+        abort(make_response(response, 400))
+
+    query = db.select(Planet).where(Planet.id == planet_id)
+    planet = db.session.scalar(query)
+
+    if not planet:
+        response = {"message": f"planet {planet_id} not found"}
+        abort(make_response(response, 404))
+
+    return planet
