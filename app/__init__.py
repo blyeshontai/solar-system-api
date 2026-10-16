@@ -10,7 +10,7 @@ def create_app(test_config=None):
 
     #tells sql alchemy which database to connect to
     #based on .env file that keeps the database URL and password out of the code
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("SQLALCHEMY_DATABASE_URI")
+    app.config["SQLALCHEMY_DATABASE_URI"] = postgresql+psycopg2://postgres:postgres@localhost:5432/solar_system_development
 
     #attach the database and migration tools to this specific app
     db.init_app(app)
