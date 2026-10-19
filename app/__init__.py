@@ -8,9 +8,19 @@ import os                                       #read environment variables
 def create_app(test_config=None):
     app = Flask(__name__)                       #creates flask app
 
+    '''Before Wave 6
     #tells sql alchemy which database to connect to
-    #based on .env file that keeps the database URL and password out of the code
     app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:postgres@localhost:5432/solar_system_development"
+    '''
+
+    #Wave 6
+    if test_config is not None:
+        app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:postgres@localhost:5432/solar_system_test"
+    else:
+        app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:postgres@localhost:5432/solar_system_development"
+
+
+
 
     #attach the database and migration tools to this specific app
     db.init_app(app)
