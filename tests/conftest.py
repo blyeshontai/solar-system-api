@@ -8,6 +8,7 @@ from app.db import db
 from flask.signals import request_finished
 from dotenv import load_dotenv
 import os
+from app.models.planet import Planet
 
 load_dotenv()
 
@@ -34,3 +35,22 @@ def app():
 @pytest.fixture
 def client(app):
     return app.test_client()
+
+# Wave 6
+@pytest.fixture
+def two_saved_planets(app):
+    # Arrange
+    mercury = Planet(
+        name="Mercury",
+        description="The closest planet to the Sun",
+        color="Gray"
+    )
+
+    venus = Planet(
+        name="Venus",
+        description="The second planet from the Sun",
+        color="Yellow"
+    )
+
+    db.session.add_all([mercury, venus])
+    db.session.commit()
