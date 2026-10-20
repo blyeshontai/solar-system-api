@@ -10,4 +10,3 @@ class Planet(db.Model):
     description: Mapped[str]
     color: Mapped[str]
 
-#consider creating a to_dict() method sos that the same four key dictionary isn't written out multiple times

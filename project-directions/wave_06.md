@@ -6,8 +6,8 @@ Complete the following requirements, with similar functionality to the Hello Boo
 
 1. Create a `.env` file.
 1. Populate it with two environment variables: `SQLALCHEMY_DATABASE_URI` and `SQLALCHEMY_TEST_DATABASE_URI`. Set their values to the appropriate connection strings.
-1. Create a test database with the correct, matching name.
-1. Refactor the `create_app` method to:
+1. Create a test database with the correct, matching name. 
+1. Refactor the `create_app` method to: 
    * Check for a configuration flag
    * Read the correct database location from the appropriate environment variables
 1. Manually test that our development environment still works.
