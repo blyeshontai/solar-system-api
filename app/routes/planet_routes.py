@@ -6,6 +6,7 @@
 from flask import Blueprint, abort, make_response, request, Response
 from app.models.planet import Planet
 from ..db import db
+from .route_utilities import validate_model
 
 #create the blueprint, start every route with /planets
 planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
@@ -54,33 +55,19 @@ def get_all_planets():
     planets = db.session.scalars(query)
 
     #turn each planet object into a dictionary and converted to JSON automatically with status 200
-    return [
-        {
-            "id": planet.id,
-            "name": planet.name,
-            "description": planet.description,
-            "color": planet.color,
-        }
-        for planet in planets
-    ]
+    return [planet.to_dict() for planet in planets]                 # Wave 7: use to_dict() for each planet
 
 # WAVE 4 - GET ONE PLANET (from Wave 2)
 @planets_bp.get("/<planet_id>")            
 def get_one_planet(planet_id):
-    planet = validate_planet(planet_id)  
+    planet = validate_model(Planet, planet_id)                      # Wave 7: use validate_model for Planet
 
-    #return that single planet as a dictionary
-    return {
-        "id": planet.id,
-        "name": planet.name,
-        "description": planet.description,
-        "color": planet.color,
-    }
+    return planet.to_dict()                                         # Wave 7: use to_dict() to avoid reapeating code
 
 #PUT/UPDATE ONE PLANET - WAVE 4
 @planets_bp.put("/<planet_id>")
 def update_planet(planet_id):
-    planet = validate_planet(planet_id) 
+    planet = validate_planet(Planet, planet_id)                     # Wave 7: use validate_model for Planet
     request_body = request.get_json()   
 
    
@@ -95,7 +82,7 @@ def update_planet(planet_id):
 @planets_bp.delete("/<planet_id>")
 def delete_planet(planet_id):
     
-    planet = validate_planet(planet_id)
+    planet = validate_model(Planet, planet_id)                      #Wave 7: use validate_model for Planet
     db.session.delete(planet)
     db.session.commit()
 
@@ -108,39 +95,12 @@ def delete_planet(planet_id):
 def create_planet():
     request_body = request.get_json()              
 
-    new_planet = Planet(                           
-        name = request_body["name"],
-        description = request_body["description"],
-        color = request_body["color"],
-    )
+    new_planet = Planet.from_dict(request_body)                     # Wave 7: creates a Planet from the request data and keep the routes clean
     db.session.add(new_planet)                     
     db.session.commit()                            
 
     #return new planet
-    return {
-        "id": new_planet.id,
-        "name": new_planet.name,
-        "description": new_planet.description,
-        "color": new_planet.color,
-    }, 201
+    return new_planet.to_dict(), 201                                # Wave 7: use to_dict() to avoid reapeating the dictionary code
 
 
-# WAVE 2 VALIDATION - UPDATED FOR DATABASE IN WAVE 4
-#VALIDATE PLANET
-def validate_planet(planet_id):
-    try: 
-        #try converting the URL value to an int
-        planet_id = int(planet_id)
-    except ValueError:
-        response = {"message": f"planet {planet_id} invalid"}
-        abort(make_response(response, 400))
 
-    query = db.select(Planet).where(Planet.id == planet_id) #query for the planet with that id
-    planet = db.session.scalar(query)                       #query for the planet with that id. scalar returns 1 object or None
-
-    if not planet:
-        response = {"message": f"planet {planet_id} not found"}
-        abort(make_response(response, 404))                 #return 404 if nothing is found
-
-    #otherwise return
-    return planet
