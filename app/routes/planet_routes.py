@@ -16,10 +16,10 @@ planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
 # Wave 5 adds optional description and color filters
 @planets_bp.get("")
 def get_all_planets():
-    
+
     query = db.select(Planet)
 
-    # WAVE 5 
+    # WAVE 5
     description_param = request.args.get("description")
 
     if description_param:
@@ -27,7 +27,7 @@ def get_all_planets():
             Planet.description.ilike(f"%{description_param}%")
         )
 
-    # WAVE 5 
+    # WAVE 5
     color_param = request.args.get("color")
 
     if color_param:
@@ -57,7 +57,7 @@ def get_all_planets():
     return [planet.to_dict() for planet in planets]                 # Wave 7: use to_dict() for each planet
 
 # WAVE 4 - GET ONE PLANET (from Wave 2)
-@planets_bp.get("/<planet_id>")            
+@planets_bp.get("/<planet_id>")
 def get_one_planet(planet_id):
     planet = validate_model(Planet, planet_id)                      # Wave 7: use validate_model for Planet
 
@@ -66,21 +66,21 @@ def get_one_planet(planet_id):
 #PUT/UPDATE ONE PLANET - WAVE 4
 @planets_bp.put("/<planet_id>")
 def update_planet(planet_id):
-    planet = validate_planet(Planet, planet_id)                     # Wave 7: use validate_model for Planet
-    request_body = request.get_json()   
+    planet = validate_model(Planet, planet_id)                     # Wave 7: use validate_model for Planet
+    request_body = request.get_json()
 
-   
+
     planet.name = request_body["name"]
     planet.description = request_body["description"]
     planet.color = request_body["color"]
     db.session.commit()
-    
+
     return Response(status=204, mimetype="application/json")
 
 #DELETE ONE PLANET - WAVE 4
 @planets_bp.delete("/<planet_id>")
 def delete_planet(planet_id):
-    
+
     planet = validate_model(Planet, planet_id)                      #Wave 7: use validate_model for Planet
     db.session.delete(planet)
     db.session.commit()
@@ -92,14 +92,11 @@ def delete_planet(planet_id):
 #POST A PLANET - WAVE 3
 @planets_bp.post("")
 def create_planet():
-    request_body = request.get_json()              
+    request_body = request.get_json()
 
     new_planet = Planet.from_dict(request_body)                     # Wave 7: creates a Planet from the request data and keep the routes clean
-    db.session.add(new_planet)                     
-    db.session.commit()                            
+    db.session.add(new_planet)
+    db.session.commit()
 
     #return new planet
     return new_planet.to_dict(), 201                                # Wave 7: use to_dict() to avoid reapeating the dictionary code
-
-
-
