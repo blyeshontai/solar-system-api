@@ -3,7 +3,6 @@ from sqlalchemy import ForeignKey
 
 from ..db import db
 
-
 class Moon(db.Model):
 
     id: Mapped[int] = mapped_column(primary_key=True)

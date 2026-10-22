@@ -18,6 +18,7 @@ class Planet(db.Model):
             "name": self.name,
             "description": self.description,
             "color": self.color,
+            "moons": [moon.to_dict() for moon in self.moons]              # Wave 7: include moons in the dictionary representation of a Planet
             
         }
     @classmethod

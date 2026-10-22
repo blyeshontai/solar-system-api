@@ -24,7 +24,8 @@ def test_get_one_planet(client, two_saved_planets):
         "id": 1,
         "name": "Mercury",
         "description": "The closest planet to the Sun",
-        "color": "Gray"
+        "color": "Gray",
+        "moons": []
     }
 
 #no fixture returns 404
@@ -53,13 +54,15 @@ def test_get_all_planets_with_records(client, two_saved_planets):
             "id": 1,
             "name": "Mercury",
             "description": "The closest planet to the Sun",
-            "color": "Gray"
+            "color": "Gray",
+            "moons": []
         },
         {
             "id": 2,
             "name": "Venus",
             "description": "The second planet from the Sun",
-            "color": "Yellow"
+            "color": "Yellow",
+            "moons": []
         }
     ]
 
@@ -82,5 +85,6 @@ def test_create_planet(client):
         "id": 1,
         "name": "Venus",
         "description": "The second planet from the Sun",
-        "color": "Yellow"
+        "color": "Yellow",
+        "moons": []
     }
