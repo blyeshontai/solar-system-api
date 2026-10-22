@@ -7,6 +7,8 @@ from flask import Blueprint, abort, make_response, request, Response
 from app.models.planet import Planet
 from ..db import db
 from .route_utilities import validate_model
+from app.models.moon import Moon
+from app.models.planet import Planet
 
 #create the blueprint, start every route with /planets
 planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
@@ -100,3 +102,24 @@ def create_planet():
 
     #return new planet
     return new_planet.to_dict(), 201                                # Wave 7: use to_dict() to avoid reapeating the dictionary code
+
+
+@planets_bp.post("/<planet_id>/moons")
+def create_moon_for_planet(planet_id):
+    planet = validate_model(Planet, planet_id)
+    request_body = request.get_json()
+
+    new_moon = Moon.from_dict(request_body)
+    new_moon.planet = planet
+    db.session.add(new_moon)
+    db.session.commit()
+
+    #return new planet
+    return new_moon.to_dict(), 201
+
+
+@planets_bp.get("/<planet_id>/moons")
+def get_moons_for_planet(planet_id):
+    planet = validate_model(Planet, planet_id)                      # Wave 7: use validate_model for Planet
+
+    return [moon.to_dict() for moon in planet.moons], 200
