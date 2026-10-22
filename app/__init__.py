@@ -17,9 +17,9 @@ def create_app(test_config=None):
 
     #Wave 6
     if test_config is not None:
-        app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:postgres@localhost:5432/solar_system_test"
+        app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('SQLALCHEMY_TEST_DATABASE_URI')
     else:
-        app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:postgres@localhost:5432/solar_system_development"
+        app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('SQLALCHEMY_DATABASE_URI')
 
     
 
