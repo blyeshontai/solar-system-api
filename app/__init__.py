@@ -2,7 +2,9 @@ from flask import Flask                         #import flask
 from .routes.planet_routes import planets_bp    #blueprint that holds the planet routes
 from .db import db, migrate                     #brings in the shared db and migrage objects
 from .models import planet                      #imports models module so Flask-Migrate can see the table
-import os                                       #read environment variables
+import os                     
+from app.models.planet import Planet
+from app.models.moon import Moon                  
 
 #BUILD THE APP
 def create_app(test_config=None):
@@ -18,6 +20,8 @@ def create_app(test_config=None):
         app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:postgres@localhost:5432/solar_system_test"
     else:
         app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://postgres:postgres@localhost:5432/solar_system_development"
+
+    
 
 
 

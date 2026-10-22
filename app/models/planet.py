@@ -1,4 +1,5 @@
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from ..db import db
 
 #edited the previous code from before the database existed.
@@ -9,6 +10,7 @@ class Planet(db.Model):
     name: Mapped[str]                                                       #mapped str is required text column + color
     description: Mapped[str]
     color: Mapped[str]
+    moons: Mapped[list["Moon"]] = relationship(back_populates="planet")      #relationship to moon, back_populates is the other side of the relationship
 
     def to_dict(self):                                                      # Wave 7: to_dict converts a Planet object into a dictionary to avoid repeating the same dictionary code. 
         return {
@@ -16,6 +18,7 @@ class Planet(db.Model):
             "name": self.name,
             "description": self.description,
             "color": self.color,
+            
         }
     @classmethod
     def from_dict(cls, planet_data):                                         # Wave 7: creates a new Planet object from dictionary data. 

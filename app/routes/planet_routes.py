@@ -17,7 +17,6 @@ planets_bp = Blueprint("planets_bp", __name__, url_prefix="/planets")
 @planets_bp.get("")
 def get_all_planets():
     
-
     query = db.select(Planet)
 
     # WAVE 5 
